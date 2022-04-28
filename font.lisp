@@ -21,6 +21,7 @@
   (kernings :accessor kernings :initform (make-hash-table))
   (characters :accessor characters :initform (make-array 256 :initial-element nil))
   (pdf-widths :accessor pdf-widths :initform (make-array 256 :initial-element 0))
+  (ascender :accessor ascender :initform 0)
   (descender :accessor descender :initform 0)))		; minimum descender
 
 (defmethod print-object ((self font) stream)
@@ -31,7 +32,8 @@
   (let ((font-metrics (gethash (name font) *font-metrics*)))
     (unless font-metrics (error "Font ~s not found" (name font)))
     (setf (font-metrics font) font-metrics
-          (descender font) (descender font-metrics))
+          (descender font) (descender font-metrics)
+	  (ascender font) (ascender font-metrics))
     (unless encoding
       (setf (gethash (list (name font) nil) *font-cache*) font))
     (setf (encoding font)
@@ -66,6 +68,9 @@
 
 (defun get-font-descender (font &optional font-size)
   (if font-size (* (descender font) font-size) (descender font)))
+
+(defun get-font-ascender (font &optional font-size)
+  (if font-size (* (ascender font) font-size) (ascender font)))
 
 (defun compute-kern-pairs (font)
   (let ((char-to-code (make-hash-table))

@@ -50,4 +50,5 @@
    #:load-t1-font #:load-ttu-font #:load-ttf-font #:encoding #:get-encoding
    #:draw-bar-code128 #:draw-qr-code #:*page-number*
    #:test-template #:make-template-from-page #:add-templates-to-page #:draw-template
-   #:image-file-parse-error #:initialize! #:confirm-afm-files-directories))
+   #:image-file-parse-error #:initialize! #:confirm-afm-files-directories
+   #:get-font-ascender))

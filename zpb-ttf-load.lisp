@@ -87,7 +87,7 @@
             (font-bbox font-metrics) font-bbox
             (notice font-metrics) (zpb-ttf:name-entry-value :copyright-notice loader)
             (ascender font-metrics) (* 0.001 units (zpb-ttf:ascender loader))
-            (descender font-metrics) (* 0.001 (zpb-ttf:descender loader))
+            (descender font-metrics) (* 0.001 units (zpb-ttf:descender loader))
 ;            (leading font-metrics) (- 1 (descender font-metrics))
             (leading font-metrics) (zpb-ttf:line-gap loader)
             (encoding-scheme font-metrics) :unicode-encoding

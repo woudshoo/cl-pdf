@@ -76,23 +76,29 @@
                               (zpb-ttf:postscript-name (second kern))
                               (third kern) 0)))
 
-      (setf (font-name font-metrics) (zpb-ttf:postscript-name loader)
-            (full-name font-metrics) (zpb-ttf:full-name loader)
-            (family-name font-metrics) (zpb-ttf:family-name loader)
-            (underline-position font-metrics) (* 0.001 units (zpb-ttf:underline-position loader))
-            (underline-thickness font-metrics) (* units 0.001 (zpb-ttf:underline-thickness loader))
-            (italic-angle font-metrics) italic-angle
-            (italic-sin font-metrics) italic-sin
-            (fixed-pitch-p font-metrics) (zpb-ttf:fixed-pitch-p loader)
-            (font-bbox font-metrics) font-bbox
-            (notice font-metrics) (zpb-ttf:name-entry-value :copyright-notice loader)
-            (ascender font-metrics) (* 0.001 units (zpb-ttf:ascender loader))
-            (descender font-metrics) (* 0.001 units (zpb-ttf:descender loader))
-;            (leading font-metrics) (- 1 (descender font-metrics))
-            (leading font-metrics) (zpb-ttf:line-gap loader)
-            (encoding-scheme font-metrics) :unicode-encoding
-            (characters font-metrics) characters
-            (kernings font-metrics) kernings)
+      (flet ((sanitize-name (name)
+	       (coerce  (loop :for c :across name
+			      :collect (if (eql c #\Space)
+					   #\-
+					   c))
+			'string)))
+	(setf (font-name font-metrics) (or (zpb-ttf:postscript-name loader) (sanitize-name (zpb-ttf:full-name loader)))
+              (full-name font-metrics) (zpb-ttf:full-name loader)
+              (family-name font-metrics) (zpb-ttf:family-name loader)
+              (underline-position font-metrics) (* 0.001 units (zpb-ttf:underline-position loader))
+              (underline-thickness font-metrics) (* units 0.001 (zpb-ttf:underline-thickness loader))
+              (italic-angle font-metrics) italic-angle
+              (italic-sin font-metrics) italic-sin
+              (fixed-pitch-p font-metrics) (zpb-ttf:fixed-pitch-p loader)
+              (font-bbox font-metrics) font-bbox
+              (notice font-metrics) (zpb-ttf:name-entry-value :copyright-notice loader)
+              (ascender font-metrics) (* 0.001 units (zpb-ttf:ascender loader))
+              (descender font-metrics) (* 0.001 units (zpb-ttf:descender loader))
+					;            (leading font-metrics) (- 1 (descender font-metrics))
+              (leading font-metrics) (zpb-ttf:line-gap loader)
+              (encoding-scheme font-metrics) :unicode-encoding
+              (characters font-metrics) characters
+              (kernings font-metrics) kernings))
 
       ;; From read-ufm-file
       (setf encoding-vector (make-array (1+ max-code) :initial-element void-char)
